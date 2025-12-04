@@ -37,6 +37,7 @@ int part1(char *file_name) {
             ans += 1;
         }
     }
+    free(input);
     return ans;
 }
 
@@ -66,13 +67,11 @@ int part2(char *file_name) {
             }
         }
     }
+    free(input);
     return ans;
 }
 
 int main() {
-
     printf("%d\n", part1("input.txt"));
     printf("%d\n", part2("input.txt"));
-
-    return 0;
 }

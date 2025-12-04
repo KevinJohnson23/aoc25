@@ -20,10 +20,8 @@ struct range* parse_input(char *file_name, int *num_lines) {
     struct range* ranges = malloc(sizeof(struct range) * *num_lines);
     for (int i = 0; i < *num_lines; i++) {
         fscanf(fptr, "%llu-%llu,", &start, &end);
-        struct range *r = malloc(sizeof(struct range));
-        r->start = start;
-        r->end = end;
-        ranges[i] = *r;
+        ranges[i].start = start;
+        ranges[i].end = end;
     }
 
     fclose(fptr);
@@ -85,6 +83,7 @@ unsigned long long part1(char *file_name) {
             }
         }
     }
+    free(ranges);
     return ans;
 }
 
@@ -99,6 +98,7 @@ unsigned long long part2(char *file_name) {
             }
         }
     }
+    free(ranges);
     return ans;
 }
 

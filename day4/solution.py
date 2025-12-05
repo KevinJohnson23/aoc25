@@ -12,28 +12,27 @@ DIRS = (
 )
 
 def parse_input(file_name):
-    parsed = []
+    parsed = set()
     with open(file_name, "r") as f:
-        for line in f.readlines():
-            parsed.append([1 if c == "@" else 0 for c in line.strip()])
+        for m, line in enumerate(f.readlines()):
+            for n, c in enumerate(line.strip()):
+                if c == "@":
+                    parsed.add((m,n))
     return parsed
 
 def count_adjacent(grid, m, n):
     adjacent = 0
     for y, x in DIRS:
-        if 0 <= m-y < len(grid) and 0 <= n-x < len(grid[0]):
-            adjacent += grid[m-y][n-x]
+        if (m+y, n+x) in grid:
+            adjacent += 1
     return adjacent
 
 def part1(file_name):
     ans = 0
     grid = parse_input(file_name)
-    for m in range(len(grid)):
-        for n in range(len(grid[0])):
-            if grid[m][n] == 0:
-                continue
-            if count_adjacent(grid, m, n) < 4:
-                ans += 1
+    for m, n in grid:
+        if count_adjacent(grid, m, n) < 4:
+            ans += 1
     return ans
 
 def part2(file_name):
@@ -42,13 +41,13 @@ def part2(file_name):
     grid = parse_input(file_name)
     while ans != prevAns:
         prevAns = ans
-        for m in range(len(grid)):
-            for n in range(len(grid[0])):
-                if grid[m][n] == 0:
-                    continue
-                if count_adjacent(grid, m, n) < 4:
-                    grid[m][n] = 0
-                    ans += 1
+        toRemove = []
+        for m, n in grid:
+            if count_adjacent(grid, m, n) < 4:
+                ans += 1
+                toRemove.append((m, n))
+        for t in toRemove:
+            grid.remove(t)
     return ans
 
 if __name__ == "__main__":

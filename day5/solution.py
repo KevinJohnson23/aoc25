@@ -11,9 +11,19 @@ def parse_input(file_name):
             parsed[1].append(int(r))
     return parsed
 
+def merge_ranges(ranges):
+    merged_ranges = []
+    for start, end in sorted(ranges):
+        if merged_ranges and merged_ranges[-1][1] >= start:
+            merged_ranges[-1][1] = max(merged_ranges[-1][1], end)
+        else:
+            merged_ranges.append([start, end])
+    return merged_ranges
+
 def part1(file_name):
     ans = 0
     ranges, ingredients = parse_input(file_name)
+    ranges = merge_ranges(ranges)
     for ingredient in ingredients:
         for start, end in ranges:
             if start <= ingredient <= end:
@@ -24,13 +34,8 @@ def part1(file_name):
 def part2(file_name):
     ans = 0
     ranges, _ingredients = parse_input(file_name)
-    mergedRanges = []
-    for start, end in sorted(ranges):
-        if mergedRanges and mergedRanges[-1][1] >= start:
-            mergedRanges[-1][1] = max(mergedRanges[-1][1], end)
-        else:
-            mergedRanges.append([start, end])
-    for start, end in mergedRanges:
+    ranges = merge_ranges(ranges)
+    for start, end in ranges:
         ans += (end-start)+1
     return ans
 
